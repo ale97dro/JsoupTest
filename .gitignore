@@ -29,3 +29,7 @@ hs_err_pid*
 *.ipr
 /.idea
 /target
+
+### Personal files ###
+personal_conf.txt
+
