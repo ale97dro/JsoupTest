@@ -20,7 +20,7 @@ public class Main {
     {
         System.out.print("ciao");
 
-        String url = "";
+        String url = "https://www.stoxx.com/discovery-search?category=flagship&superType=sector&indexFamily=standard";
         // Document doc = Jsoup.connect(url).get();
         //Document doc = Jsoup.connect(url).get();
 
@@ -39,14 +39,19 @@ public class Main {
         try
         {
             //Path format: C:\\directory\\phantomjs.exe
-            String phantomJsDriver = "";
+            String phantomJsDriver = "./lib/phantomjs.exe";
             System.setProperty("phantomjs.binary.path", phantomJsDriver); //percorso dove si trova il driver di PhantomJS
             WebDriver ghostDriver = new PhantomJSDriver();
             ghostDriver.get(urlString); //prendo il sito di cui devo eseguire il codice JavaScript
             Document doc = Jsoup.parse(ghostDriver.getPageSource()); //Eseguo il parsing della sorgente con JSoup
 
             Elements value = doc.getElementsByClass("daily-performance"); //cerco i campi che mi interessano
-            System.out.printf("ciao");
+            Elements value2 = doc.getElementsByClass("box-heading");
+            //box-heading classe del contenitore del titolo
+           // System.out.printf("ciao");
+
+            for(Element e : value)
+                System.out.println(value.text());
         }
         catch (Exception ex)
         {
