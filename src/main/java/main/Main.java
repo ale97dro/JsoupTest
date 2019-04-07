@@ -16,8 +16,7 @@ import java.net.URL;
 
 public class Main {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws Exception {
         System.out.print("ciao");
 
         String url = "https://www.stoxx.com/discovery-search?category=flagship&superType=sector&indexFamily=standard";
@@ -31,7 +30,13 @@ public class Main {
         // Elements value = doc.select("div#default-search-result");
 
 
-        ghost(url);
+        //url = "./src/test/resources/index.html";
+        Scraper scraper = Scraper.createScraper(url);
+        Double value = scraper.stockValue( null);
+
+        System.out.println(value);
+
+        //ghost(url);
     }
 
     public static void ghost(String urlString)
