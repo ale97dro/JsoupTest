@@ -130,8 +130,8 @@ public class Scraper
 
         //ghostDriver.
 
-//        File src = ((TakesScreenshot)ghostDriver).getScreenshotAs(OutputType.FILE);
-//        FileUtils.copyFile(src, new File("./test.jpg"), true);
+        File src = ((TakesScreenshot)ghostDriver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(src, new File("./test.jpg"), false);
 
     //        Actions x = new Actions(ghostDriver);
     //        x.moveToElement(aTag.get(0));
