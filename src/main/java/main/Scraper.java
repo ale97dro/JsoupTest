@@ -116,10 +116,22 @@ public class Scraper
         List<WebElement> aTag = links.get(0).findElements(children);
 
         aTag.get(0).click();
-        ((PhantomJSDriver) ghostDriver).executeScript("paginateTile('2')");
 
-        File src = ((TakesScreenshot)ghostDriver).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(src, new File("./test.jpg"), true);
+        //Per prendere la pagina dopo
+        String winHandleBefore = ghostDriver.getWindowHandle();
+
+        for(String winHandle : ghostDriver.getWindowHandles())
+        {
+            ghostDriver.switchTo().window(winHandle);
+        }
+
+        //((PhantomJSDriver) ghostDriver).executeScript("paginateTile('2')");
+
+
+        //ghostDriver.
+
+//        File src = ((TakesScreenshot)ghostDriver).getScreenshotAs(OutputType.FILE);
+//        FileUtils.copyFile(src, new File("./test.jpg"), true);
 
     //        Actions x = new Actions(ghostDriver);
     //        x.moveToElement(aTag.get(0));
@@ -134,8 +146,8 @@ public class Scraper
         By newStock = By.className("box-heading");
         List<WebElement> resultElementList = ghostDriver.findElements(newStock);
 
-        for(WebElement y : resultElementList)
-            System.out.println(y.getText());
+//        for(WebElement y : resultElementList)
+//            System.out.println(y.getText());
 
         return ghostDriver.getPageSource();
     }
