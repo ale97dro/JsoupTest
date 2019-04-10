@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Scraper
+public class ScraperOld
 {
     private static String PHANTOM_JS_LIBRARY = "./lib/phantomjs.exe";
     private static String PHANTOM_JS_BIN_PATH = "phantomjs.binary.path";
@@ -27,15 +27,15 @@ public class Scraper
     private String url;
     private String source;
 
-    public static Scraper createScraper(String url)
+    public static ScraperOld createScraper(String url)
     {
-        Scraper scraper = new Scraper(url);
+        ScraperOld scraper = new ScraperOld(url);
 
 
         return scraper;
     }
 
-    private Scraper(String url)
+    private ScraperOld(String url)
     {
         System.setProperty(PHANTOM_JS_BIN_PATH, PHANTOM_JS_LIBRARY); //percorso dove si trova il driver di PhantomJS
         this.url = url;

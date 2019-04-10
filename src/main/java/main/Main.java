@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Main {
@@ -31,10 +30,12 @@ public class Main {
 
 
         //url = "./src/test/resources/index.html";
-        Scraper scraper = Scraper.createScraper(url);
+        ScraperOld scraper = ScraperOld.createScraper(url);
         Double value = scraper.stockValue( null);
 
         System.out.println(value);
+
+
 
         //ghost(url);
     }

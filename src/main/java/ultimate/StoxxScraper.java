@@ -1,5 +1,9 @@
 package ultimate;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,7 +33,7 @@ public class StoxxScraper implements Scraper<Double>
      * Factory method for a new instance of StoxxScraper
      * @return new StoxxScraper instance
      */
-    public Scraper createScraper()
+    public static Scraper createScraper()
     {
         System.setProperty(PHANTOM_JS_LIBRARY_PATH_PROPERTY, PHANTOM_JS_LIBRARY_PATH);
 
@@ -89,10 +93,39 @@ public class StoxxScraper implements Scraper<Double>
 
         WebDriver driver = createPhantomDriver();
 
-        By by = By.className("pagination_pagenumber_bg");
+        // 1) prendo i nomi e il loro valore
+        // 2) prendo gli indici delle pagine
+        // 3) clicco sul link giusto e aggiorno
+        // 4) ripeto il procedimento
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            //prendo nomi e valori
+            List<WebElement> stocksName = getPageElements(driver, By.className("box-heading"));
+            List<WebElement> stocksValue = getPageElements(driver, By.className("daily-performance"));
+
+
+            //inserisco nomi e valori nella mappa
+            for(int c = 0; c < stocksName.size(); c++)
+            {
+                String stockValue = stocksValue.get(c).getText();
+                stockValue = stockValue.substring(0, stockValue.length() - 1);
+                results.put(stocksName.get(c).getText(), Double.parseDouble(stockValue));
+            }
+
+
+
+        }
 
 
         return results;
+    }
+
+
+    private List<WebElement> getPageElements(WebDriver driver, By by)
+    {
+        return driver.findElements(by);
     }
 
 
