@@ -99,7 +99,7 @@ public class StoxxScraper implements Scraper<Double>
         // 4) ripeto il procedimento
 
 
-        for(int i = 0; i < 1; i++)
+        for(int i = 0; i < PAGES; i++)
         {
             //prendo nomi e valori
             List<WebElement> stocksName = getPageElements(driver, By.className("box-heading"));
@@ -115,6 +115,17 @@ public class StoxxScraper implements Scraper<Double>
             }
 
 
+            List<WebElement> pageButtons = getPageElements(driver, By.className("pagination_pagenumber_bg")); //qui ho 10 bottoni
+            List<WebElement> linkButtons = getPageElements(pageButtons.get(computePageIndex(i)), By.tagName("a"));
+
+            linkButtons.get(0).click(); //always return just one element (the link itself)
+
+            updateDriverSource(driver);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -128,6 +139,14 @@ public class StoxxScraper implements Scraper<Double>
         return driver.findElements(by);
     }
 
+    private List<WebElement> getPageElements(WebElement element, By by)
+    {
+        return element.findElements(by);
+    }
 
-
+    private int computePageIndex(int base)
+    {
+        //TODO: implements
+        return 0;
+    }
 }
