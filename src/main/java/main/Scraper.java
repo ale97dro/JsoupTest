@@ -2,6 +2,7 @@ package main;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.*;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -17,9 +18,9 @@ import java.util.Map;
 public class Scraper
 {
     private static String PHANTOM_JS_LIBRARY = "./lib/phantomjs.exe";
+    private static String PHANTOM_JS_BIN_PATH = "phantomjs.binary.path";
     private static String CHROME_DRIVER = "./lib/chromedriver.exe";
     private static String CHROME_DRIVER_KEY = "webdriver.chrome.driver";
-    private static String PHANTOM_JS_BIN_PATH = "phantomjs.binary.path";
 
     private static int PAGES = 14;
 
@@ -143,8 +144,21 @@ public class Scraper
 
 
        // By resultListByXPath = By.xpath("//ol[@class=\"mb-15 reg searchCenterMiddle\"]/li");
-        By newStock = By.className("box-heading");
-        List<WebElement> resultElementList = ghostDriver.findElements(newStock);
+//        By newStock = By.className("box-heading");
+//        List<WebElement> resultElementList = ghostDriver.findElements(newStock);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String source = ghostDriver.getPageSource();
+        Document doc = Jsoup.parse(source);
+        Elements stocksNameTag = doc.getElementsByClass("box-heading");
+
+        for(Element w : stocksNameTag)
+            System.out.println(w.text());
 
 //        for(WebElement y : resultElementList)
 //            System.out.println(y.getText());
