@@ -1,97 +1,50 @@
 package ultimate;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Execute the scraping of stoxx.com website.
+ *
+ * @author Alessandro Bianchi
+ */
 public class StoxxScraper implements Scraper<Double>
 {
     /**
-     * Scraping library's string configuration
-     */
-    private static String PHANTOM_JS_LIBRARY_PATH = "./lib/phantomjs.exe";
-    private static String PHANTOM_JS_LIBRARY_PATH_PROPERTY = "phantomjs.binary.path";
-
-    /**
      * Scraping parameters
      */
-    private static int PAGES = 14;
-    private static String URL = "https://www.stoxx.com/discovery-search?category=flagship&superType=sector&indexFamily=standard";
+    private static final int PAGES = 14;
+    public static final String URL = "https://www.stoxx.com/discovery-search?category=flagship&superType=sector&indexFamily=standard";
 
-    private String url;
+    //private String url;
+    private Driver driver;
 
     /**
      * Factory method for a new instance of StoxxScraper
+     * @param driver THe driver you want to use for scrape the website
      * @return new StoxxScraper instance
      */
-    public static Scraper createScraper()
+    public static Scraper createScraper(Driver driver)
     {
-        System.setProperty(PHANTOM_JS_LIBRARY_PATH_PROPERTY, PHANTOM_JS_LIBRARY_PATH);
-
-        return new StoxxScraper();
+        return new StoxxScraper(driver);
     }
 
     /**
      * Private constructor
      */
-    private StoxxScraper()
+    private StoxxScraper(Driver driver)
     {
-
+        this.driver = driver;
     }
 
-    public static String getUrl()
-    {
-        return URL;
-    }
-
-
-    //PhantomJS driver
-
-    /**
-     * Create a new PhantomJS driver.
-     * This driver will take the URL source
-     * @return PhantomJS driver
-     */
-    private WebDriver createPhantomDriver()
-    {
-        WebDriver ghostDriver = new PhantomJSDriver();
-        ghostDriver.get(URL);
-        return ghostDriver;
-    }
-
-    /**
-     * After perform some operations, you might need to update your driver's source.
-     * With PhantomJS, you can perform this operation via "WindowHandle" system.
-     * @param driver Driver you want to update
-     * @return Previous handler
-     */
-    private String updateDriverSource(WebDriver driver)
-    {
-        String winHandleBefore = driver.getWindowHandle();
-
-        for(String winHandle : driver.getWindowHandles())
-            driver.switchTo().window(winHandle);
-
-        return winHandleBefore;
-    }
-
-
-    //REAL SCRAPING OPERATION
     @Override
     public Map<String, Double> scrape(List<String> elementsToFind)
     {
         Map<String, Double> results = new HashMap<>();
-
-        WebDriver driver = createPhantomDriver();
 
         // 1) prendo i nomi e il loro valore
         // 2) prendo gli indici delle pagine
@@ -102,9 +55,8 @@ public class StoxxScraper implements Scraper<Double>
         for(int i = 0; i < PAGES; i++)
         {
             //prendo nomi e valori
-            List<WebElement> stocksName = getPageElements(driver, By.className("box-heading"));
-            List<WebElement> stocksValue = getPageElements(driver, By.className("daily-performance"));
-
+            List<WebElement> stocksName = driver.findElements("box-heading");
+            List<WebElement> stocksValue = driver.findElements("daily-performance");
 
             //inserisco nomi e valori nella mappa
             for(int c = 0; c < stocksName.size(); c++)
@@ -115,12 +67,13 @@ public class StoxxScraper implements Scraper<Double>
             }
 
 
-            List<WebElement> pageButtons = getPageElements(driver, By.className("pagination_pagenumber_bg")); //qui ho 10 bottoni
+            List<WebElement> pageButtons = driver.findElements("pagination_pagenumber_bg");
             List<WebElement> linkButtons = getPageElements(pageButtons.get(computePageIndex(i)), By.tagName("a"));
 
             linkButtons.get(0).click(); //always return just one element (the link itself)
 
-            updateDriverSource(driver);
+            driver.updateSource();
+
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -129,16 +82,15 @@ public class StoxxScraper implements Scraper<Double>
 
         }
 
-
         return results;
     }
 
-
-    private List<WebElement> getPageElements(WebDriver driver, By by)
-    {
-        return driver.findElements(by);
-    }
-
+    /**
+     * Find child element of a WebElement
+     * @param element Parent element
+     * @param by Element you need to find in the parent
+     * @return List of WebElement corresponding to tbe by parameter
+     */
     private List<WebElement> getPageElements(WebElement element, By by)
     {
         return element.findElements(by);
