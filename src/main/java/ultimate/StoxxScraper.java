@@ -62,15 +62,34 @@ public class StoxxScraper implements Scraper<Double>
             for(int c = 0; c < stocksName.size(); c++)
             {
                 String stockValue = stocksValue.get(c).getText();
-                stockValue = stockValue.substring(0, stockValue.length() - 1);
-                results.put(stocksName.get(c).getText(), Double.parseDouble(stockValue));
+
+                try
+                {
+                    stockValue = stockValue.substring(0, stockValue.length() - 1);
+                    results.put(stocksName.get(c).getText(), Double.parseDouble(stockValue));
+                }
+                catch (Exception ex)
+                {
+                    //ex.printStackTrace();
+                    System.out.println("Stock value not available");
+                }
+
             }
 
 
             List<WebElement> pageButtons = driver.findElements("pagination_pagenumber_bg");
-            List<WebElement> linkButtons = getPageElements(pageButtons.get(computePageIndex(i)), By.tagName("a"));
+            try {
+                //TODO: fixare qui
+                List<WebElement> linkButtons = getPageElements(pageButtons.get(computePageIndex(i)), By.tagName("a"));
+                linkButtons.get(0).click(); //always return just one element (the link itself)
+            }
+            catch (Exception ex)
+            {
+                //todo: se entro qui significa che sono arrivato all'ultima pagina
+                //ex.printStackTrace();
+            }
 
-            linkButtons.get(0).click(); //always return just one element (the link itself)
+
 
             driver.updateSource();
 
@@ -98,7 +117,14 @@ public class StoxxScraper implements Scraper<Double>
 
     private int computePageIndex(int base)
     {
-        //TODO: implements
-        return 0;
+        //TODO: correggere un errore che mi manda in outOfBound: base diventa troppo grande (>= 9) e i bottoni sono solo 9
+
+        if(base < 4)
+            return base;
+
+        if(base <= 8)
+            return 5;
+
+        return base - 3;
     }
 }
