@@ -6,9 +6,8 @@ import java.util.Map;
 /**
  *
  * @author Alessandro Bianchi
- * @param <T>
  */
-public interface Scraper<T>
+public interface Scraper
 {
-    Map<String, T> scrape(List<String> elementsToFind);
+    Map<String, Double> scrape(List<String> elementsToFind);
 }

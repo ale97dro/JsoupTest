@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Alessandro Bianchi
  */
-public class StoxxScraper implements Scraper<Double>
+public class StoxxScraper implements Scraper
 {
     /**
      * Scraping parameters
