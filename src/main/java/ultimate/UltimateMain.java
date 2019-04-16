@@ -1,9 +1,6 @@
 package ultimate;
 
-import com.google.common.collect.Lists;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +8,9 @@ public class UltimateMain {
 
     public static void main(String[] args)
     {
-        Scraper scraper = StoxxScraper.createScraper(PhatomJSDriverWrapper.createDriver(StoxxScraper.URL));
+        Scraper scraper = StoxxScraper.createScraper(PhantomJSDriverWrapper.createDriver(StoxxScraper.URL));
 
-        Map<String, Double> results = scraper.scrape(null);
+        Map<String, Double> results = scraper.scrape();
 
 
         String stock = "Electronic & electrical equipment";

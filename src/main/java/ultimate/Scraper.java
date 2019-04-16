@@ -1,6 +1,5 @@
 package ultimate;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,5 +8,5 @@ import java.util.Map;
  */
 public interface Scraper
 {
-    Map<String, Double> scrape(List<String> elementsToFind);
+    Map<String, Double> scrape();
 }

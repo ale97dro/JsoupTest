@@ -42,54 +42,46 @@ public class StoxxScraper implements Scraper
     }
 
     @Override
-    public Map<String, Double> scrape(List<String> elementsToFind)
+    public Map<String, Double> scrape()
     {
         Map<String, Double> results = new HashMap<>();
 
-        // 1) prendo i nomi e il loro valore
-        // 2) prendo gli indici delle pagine
-        // 3) clicco sul link giusto e aggiorno
-        // 4) ripeto il procedimento
-
+        // 1) takes names and their values
+        // 2) takes index of pages
+        // 3) clikc on the right button and update
+        // 4) repeat for all pages
 
         for(int i = 0; i < PAGES; i++)
         {
-            //prendo nomi e valori
+            //take names and values
             List<WebElement> stocksName = driver.findElements("box-heading");
             List<WebElement> stocksValue = driver.findElements("daily-performance");
 
-            //inserisco nomi e valori nella mappa
+            //insert names and values into the map
             for(int c = 0; c < stocksName.size(); c++)
             {
-                String stockValue = stocksValue.get(c).getText();
-
                 try
                 {
+                    String stockValue = stocksValue.get(c).getText();
                     stockValue = stockValue.substring(0, stockValue.length() - 1);
                     results.put(stocksName.get(c).getText(), Double.parseDouble(stockValue));
                 }
                 catch (Exception ex)
                 {
-                    //ex.printStackTrace();
                     System.out.println("Stock value not available");
                 }
 
             }
-
-
+            
             List<WebElement> pageButtons = driver.findElements("pagination_pagenumber_bg");
             try {
-                //TODO: fixare qui
                 List<WebElement> linkButtons = getPageElements(pageButtons.get(computePageIndex(i)), By.tagName("a"));
                 linkButtons.get(0).click(); //always return just one element (the link itself)
             }
             catch (Exception ex)
             {
-                //todo: se entro qui significa che sono arrivato all'ultima pagina
-                //ex.printStackTrace();
+                //this is the last page: no more page available!
             }
-
-
 
             driver.updateSource();
 
@@ -117,8 +109,6 @@ public class StoxxScraper implements Scraper
 
     private int computePageIndex(int base)
     {
-        //TODO: correggere un errore che mi manda in outOfBound: base diventa troppo grande (>= 9) e i bottoni sono solo 9
-
         if(base < 4)
             return base;
 

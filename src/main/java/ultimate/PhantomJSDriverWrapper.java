@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Alessandro Bianchi
  */
-public class PhatomJSDriverWrapper implements Driver
+public class PhantomJSDriverWrapper implements Driver
 {
     /**
      * Scraping library's string configuration
@@ -30,16 +30,16 @@ public class PhatomJSDriverWrapper implements Driver
      * @param url Site you want to scrape
      * @return PhantomJS driver
      */
-    public static PhatomJSDriverWrapper createDriver(String url)
+    public static PhantomJSDriverWrapper createDriver(String url)
     {
-        return new PhatomJSDriverWrapper(url);
+        return new PhantomJSDriverWrapper(url);
     }
 
     /**
      * Private constructor
      * @param url Url of webpage you want to load into the driver
      */
-    private PhatomJSDriverWrapper(String url)
+    private PhantomJSDriverWrapper(String url)
     {
         System.setProperty(PHANTOM_JS_LIBRARY_PATH_PROPERTY, PHANTOM_JS_LIBRARY_PATH);
 
